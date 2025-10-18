@@ -6,3 +6,13 @@ Screen {
     text-style: bold;
     margin: 1 0;
 }
+
+.button-group {
+    width: auto;
+    height: auto;
+    margin-top: 1;
+}
+
+.button-group Button {
+    margin: 0 1;
+}
