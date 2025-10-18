@@ -1,0 +1,8 @@
+Screen {
+    align: center middle;
+}
+
+.title {
+    text-style: bold;
+    margin: 1 0;
+}
