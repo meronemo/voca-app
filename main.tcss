@@ -16,3 +16,23 @@ Screen {
 .button-group Button {
     margin: 0 1;
 }
+
+OptionList {
+    width: 50%;
+}
+
+ListView {
+    height: auto;
+}
+
+ListItem {
+    padding: 1 2;
+}
+
+#card_grid {
+    grid-size: 3 1;
+}
+
+#card_meaning {
+    column-span: 2;
+}

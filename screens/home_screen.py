@@ -1,8 +1,10 @@
 from textual.app import ComposeResult
 from textual.screen import Screen
+from textual.containers import Horizontal
 from textual.widgets import Label, Button, OptionList, Header
 from textual.widgets.option_list import Option
 from screens.create_screen import CreateScreen
+from screens.deck_screen import DeckScreen
 import os
 import json
 
@@ -10,10 +12,11 @@ class HomeScreen(Screen):
     def compose(self) -> ComposeResult:
         yield Header()
         yield Label('VocaApp', classes='title')
-        yield Button('Create New Deck', id='create', variant='primary')
+        with Horizontal(classes='button-group'):
+            yield Button('Create New Deck', id='create', variant='primary')
+            yield Button('Exit App', id='exit', variant='error')
         yield Label('Decks', classes='title')
         yield OptionList(id='deck-list')
-        yield Button('Exit', id='exit', variant='error')
     
     def on_mount(self):
         self.load_decks()
@@ -29,7 +32,7 @@ class HomeScreen(Screen):
                         try:
                             data = json.load(f)
                             if 'title' in data:
-                                deck_list.add_option(Option(data['title'], id=filename))
+                                deck_list.add_option(Option(data['title']))
                         except json.JSONDecodeError:
                             self.notify(f'JSON parsing error in {filename}', severity='error')
         else:
@@ -42,4 +45,5 @@ class HomeScreen(Screen):
             self.app.exit()
 
     def on_option_list_option_selected(self, event: OptionList.OptionSelected) -> None:
-        selected_option = event.option.id
+        selected_option = event.option.prompt
+        self.app.push_screen(DeckScreen(deck_title=selected_option))
