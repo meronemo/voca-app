@@ -1,6 +1,6 @@
 from textual.app import ComposeResult
 from textual.screen import Screen
-from textual.containers import Horizontal
+from textual.containers import Horizontal, VerticalScroll, Grid
 from textual.widgets import Label, Button, Header
 from screens.deck_edit_screen import DeckEditScreen
 import os
@@ -11,6 +11,8 @@ class DeckScreen(Screen):
         super().__init__()
         self.deck_title = deck_title
         self.title = f'Deck | {deck_title}'
+        filepath = os.path.join('./decks', f'{self.deck_title}.json')
+        self.filepath = filepath
 
     def compose(self) -> ComposeResult:
         yield Header()
@@ -19,6 +21,7 @@ class DeckScreen(Screen):
         with Horizontal(classes='button-group'):
             yield Button('Back to Home', id='back', variant='default')
             yield Button('Edit', id='edit', variant='primary')
+        yield VerticalScroll(id='cards_list')
 
     def on_mount(self):
         self.load_deck()
@@ -26,12 +29,23 @@ class DeckScreen(Screen):
     def load_deck(self):
         title_label = self.query_one('#title')
         description_label = self.query_one('#description')
-        filepath = os.path.join('./decks', f'{self.deck_title}.json')
-        with open(filepath, 'r') as f:
+        
+        with open(self.filepath, 'r') as f:
             data = json.load(f)
-            self.description = data['description']
+            description = data['description']
+            cards = data['cards']
         title_label.update(self.deck_title)
-        description_label.update(self.description)
+        description_label.update(description)
+
+        cards_list = self.query_one('#cards_list')
+        for card in cards:
+            cards_list.mount(
+                Grid(
+                    Label(card['word'], classes='card-data'),
+                    Label(card['meaning'], classes='card-data card-meaning'),
+                    classes='card-grid',
+                )
+            )
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
         if event.button.id == 'back':
