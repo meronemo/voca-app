@@ -28,16 +28,28 @@ OptionList {
 }
 
 .card-grid {
-    grid-size: 4 1;
+    grid-size: 5 1;
     height: auto;
     width: 100%;
-    margin: 0 0 1 0;
 }
 
 .card-data {
     width: 100%;
 }
 
+.card-word {
+    column-span: 1;
+}
+
 .card-meaning {
     column-span: 3;
+}
+
+.card-remove {
+    column-span: 1;
+    width: 80%;
+}
+
+#add-card {
+    width: 100%;
 }

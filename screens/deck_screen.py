@@ -21,7 +21,7 @@ class DeckScreen(Screen):
         with Horizontal(classes='button-group'):
             yield Button('Back to Home', id='back', variant='default')
             yield Button('Edit', id='edit', variant='primary')
-        yield VerticalScroll(id='cards_list')
+        yield VerticalScroll(id='cards-list')
 
     def on_mount(self):
         self.load_deck()
@@ -37,7 +37,7 @@ class DeckScreen(Screen):
         title_label.update(self.deck_title)
         description_label.update(description)
 
-        cards_list = self.query_one('#cards_list')
+        cards_list = self.query_one('#cards-list')
         for card in cards:
             cards_list.mount(
                 Grid(
