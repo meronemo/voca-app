@@ -11,10 +11,6 @@ class DeckScreen(Screen):
         super().__init__()
         self.deck_title = deck_title
         self.title = f'Deck | {deck_title}'
-        filepath = os.path.join('./decks', f'{self.deck_title}.json')
-        with open(filepath, 'r') as f:
-            data = json.load(f)
-            self.description = data['description']
 
     def compose(self) -> ComposeResult:
         yield Header()
@@ -25,8 +21,15 @@ class DeckScreen(Screen):
             yield Button('Edit', id='edit', variant='primary')
 
     def on_mount(self):
+        self.load_deck()
+
+    def load_deck(self):
         title_label = self.query_one('#title')
         description_label = self.query_one('#description')
+        filepath = os.path.join('./decks', f'{self.deck_title}.json')
+        with open(filepath, 'r') as f:
+            data = json.load(f)
+            self.description = data['description']
         title_label.update(self.deck_title)
         description_label.update(self.description)
 
@@ -34,4 +37,4 @@ class DeckScreen(Screen):
         if event.button.id == 'back':
             self.app.pop_screen()
         elif event.button.id == 'edit':
-            self.app.push_screen(DeckEditScreen(deck_title=self.deck_title))
+            self.app.push_screen(DeckEditScreen(deck_title=self.deck_title, on_edit=self.load_deck))

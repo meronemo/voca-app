@@ -21,18 +21,23 @@ OptionList {
     width: 50%;
 }
 
-ListView {
-    height: auto;
+#cards_list {
+    height: 1fr;
+    min-height: 10;
+    border: solid $primary;
 }
 
-ListItem {
-    padding: 1 2;
-}
-
-#card_grid {
+.card-grid {
     grid-size: 3 1;
+    height: auto;
+    width: 100%;
+    margin: 0 0 1 0;
 }
 
-#card_meaning {
+.card-input {
+    width: 100%;
+}
+
+.card-meaning {
     column-span: 2;
 }

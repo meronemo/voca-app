@@ -2,15 +2,45 @@
     "title": "test1",
     "description": "an example card deck",
     "cards": [
-        {"word": "abash", "meaning": "To make ashamed; to embarrass"},
-        {"word": "abate", "meaning": "To subside; to reduce"},
-        {"word": "beget", "meaning": "To give birth to; to create; to lead to; to cause"},
-        {"word": "benign", "meaning": "Gentle; not harmful; kind; mild"},
-        {"word": "circuitous", "meaning": "Round about; not following a direct path"},
-        {"word": "collusion", "meaning": "Conspiracy; secret cooperation"},
-        {"word": "despondent", "meaning": "extremely depressed; full of despair"},
-        {"word": "dissipate", "meaning": "to thin out drift away or dissolve; to waste or squander"},
-        {"word": "encroach", "meaning": "to make gradual or stealthy inroads into; to trespass on upon"},
-        {"word": "ethereal", "meaning": "heavenly as light and insubstantial as a gas or ether heavenly"}
+        {
+            "word": "abash",
+            "meaning": "To make ashamed; to embarrass"
+        },
+        {
+            "word": "abate",
+            "meaning": "To subside; to reduce"
+        },
+        {
+            "word": "beget",
+            "meaning": "To give birth to; to create; to lead to; to cause"
+        },
+        {
+            "word": "benign",
+            "meaning": "Gentle; not harmful; kind; mild"
+        },
+        {
+            "word": "circuitous",
+            "meaning": "Round about; not following a direct path"
+        },
+        {
+            "word": "collusion",
+            "meaning": "Conspiracy; secret cooperation"
+        },
+        {
+            "word": "despondent",
+            "meaning": "extremely depressed; full of despair"
+        },
+        {
+            "word": "dissipate",
+            "meaning": "to thin out drift away or dissolve; to waste or squander"
+        },
+        {
+            "word": "encroach",
+            "meaning": "to make gradual or stealthy inroads into; to trespass on upon"
+        },
+        {
+            "word": "ethereal",
+            "meaning": "heavenly as light and insubstantial as a gas or ether heavenly"
+        }
     ]
 }
