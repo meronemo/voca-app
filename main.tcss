@@ -28,16 +28,16 @@ OptionList {
 }
 
 .card-grid {
-    grid-size: 3 1;
+    grid-size: 4 1;
     height: auto;
     width: 100%;
     margin: 0 0 1 0;
 }
 
-.card-input {
+.card-data {
     width: 100%;
 }
 
 .card-meaning {
-    column-span: 2;
+    column-span: 3;
 }

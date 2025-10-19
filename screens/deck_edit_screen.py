@@ -12,18 +12,14 @@ class DeckEditScreen(Screen):
         self.deck_title = deck_title
         self.title = f'Deck Edit | {deck_title}'
         self.on_edit = on_edit
-
         filepath = os.path.join('./decks', f'{self.deck_title}.json')
         self.filepath = filepath
-        with open(filepath, 'r') as f:
-            data = json.load(f)
-            self.description = data['description']
-            self.cards = data['cards']
+        
 
     def compose(self) -> ComposeResult:
         yield Header()
-        yield Label(self.deck_title, classes='title')
-        yield Input(value=self.description, placeholder='Description', id='description')
+        yield Label(id='title', classes='title')
+        yield Input(id='description', placeholder='Description')
         with Horizontal(classes='button-group'):
             yield Button('Cancel', id='cancel', variant='default')
             yield Button('Save', id='save', variant='success')
@@ -31,12 +27,26 @@ class DeckEditScreen(Screen):
         yield VerticalScroll(id='cards_list')
 
     def on_mount(self):
+        self.load_deck()        
+
+    def load_deck(self):
         cards_list = self.query_one('#cards_list')
+        title_label = self.query_one('#title')
+        description_input = self.query_one('#description')
+
+        with open(self.filepath, 'r') as f:
+            data = json.load(f)
+            description = data['description']
+            self.cards = data['cards']
+
+        title_label.update(self.deck_title)
+        description_input.value = description
+        
         for idx, card in enumerate(self.cards):
             cards_list.mount(
                 Grid(
-                    Input(value=card['word'], placeholder='Word', id=f'word{idx}', classes='card-input', validators=Function(is_empty)),
-                    Input(value=card['meaning'], placeholder='Meaning', id=f'meaning{idx}', classes='card-input card-meaning', validators=Function(is_empty)),
+                    Input(value=card['word'], placeholder='Word', id=f'word{idx}', classes='card-data', validators=Function(is_empty)),
+                    Input(value=card['meaning'], placeholder='Meaning', id=f'meaning{idx}', classes='card-data card-meaning', validators=Function(is_empty)),
                     classes='card-grid',
                 )
             )
