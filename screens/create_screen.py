@@ -1,6 +1,6 @@
 from textual import on
 from textual.app import ComposeResult
-from textual.screen import Screen
+from textual.screen import ModalScreen
 from textual.containers import Horizontal
 from textual.widgets import Label, Button, Header, Input
 from textual.validation import ValidationResult, Validator
@@ -8,7 +8,7 @@ import os
 import json
 import re
 
-class CreateScreen(Screen):
+class CreateScreen(ModalScreen):
     TITLE = 'Create New Deck'
 
     def __init__(self, on_create=None):
@@ -18,9 +18,9 @@ class CreateScreen(Screen):
     def compose(self) -> ComposeResult:
         yield Header()
         yield Label('Create New Deck', classes='title')
-        yield Input(placeholder='Title', validators=TitleValidator(), id='title')
+        yield Input(placeholder='Title', validators=TitleValidator(), id='title', classes='w-80')
         yield Label(id='valid-msg')
-        yield Input(placeholder='Description', id='description')
+        yield Input(placeholder='Description', id='description', classes='w-80')
         with Horizontal(classes='button-group'):
             yield Button('Cancel', id='cancel', variant='error')
             yield Button('Create', id='create', variant='success')
