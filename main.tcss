@@ -1,5 +1,10 @@
-Screen, ModalScreen {
+Screen {
     align: center middle;
+}
+
+ModalScreen {
+    align: center middle;
+    background: $surface;
 }
 
 .title {
@@ -63,4 +68,9 @@ OptionList {
 
 #add-card {
     width: 100%;
+}
+
+#import-data {
+    width: 80%;
+    height: 70%;
 }
