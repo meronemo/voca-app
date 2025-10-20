@@ -21,33 +21,40 @@ OptionList {
     width: 50%;
 }
 
-#cards_list {
+#cards-list {
     height: 1fr;
     min-height: 10;
     border: solid $primary;
 }
 
 .card-grid {
-    grid-size: 5 1;
+    grid-size: 4 1;
+    margin-bottom: 1;
     height: auto;
     width: 100%;
 }
 
-.card-data {
+.card-edit-grid {
+    grid-size: 17 1;
+    margin-bottom: 1;
+    height: auto;
     width: 100%;
 }
 
-.card-word {
+.csp-1 {
     column-span: 1;
 }
 
-.card-meaning {
+.csp-3 {
     column-span: 3;
 }
 
-.card-remove {
-    column-span: 1;
-    width: 80%;
+.csp-4 {
+    column-span: 4;
+}
+
+.csp-12 {
+    column-span: 12;
 }
 
 #add-card {

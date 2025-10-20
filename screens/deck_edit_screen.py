@@ -31,11 +31,11 @@ class DeckEditScreen(Screen):
 
     def create_card_row(self, idx: int, word: str = '', meaning: str = '') -> Grid:
         return Grid(
-            Input(value=word, placeholder='Word', id=f'word{idx}', classes='card-data card-word', validators=Function(is_empty)),
-            Input(value=meaning, placeholder='Meaning', id=f'meaning{idx}', classes='card-data card-meaning', validators=Function(is_empty)),
-            Button('🗑️', id=f'remove{idx}', classes='card-data card-remove'),
+            Input(value=word, placeholder='Word', id=f'word{idx}', classes='csp-4', validators=Function(is_empty)),
+            Input(value=meaning, placeholder='Meaning', id=f'meaning{idx}', classes='csp-12', validators=Function(is_empty)),
+            Button('🗑', id=f'remove{idx}', classes='csp-1'),
             id=f'card-row{idx}',
-            classes='card-grid',
+            classes='card-edit-grid',
         )
         
     def load_deck(self):
@@ -108,8 +108,6 @@ class DeckEditScreen(Screen):
             idx = event.button.id.replace('remove', '')
             card_row = self.query_one(f'#card-row{idx}')
             card_row.remove()
-
-
 
 def is_empty(value: str) -> bool:
     return value.strip()

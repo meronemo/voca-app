@@ -41,8 +41,8 @@ class DeckScreen(Screen):
         for card in cards:
             cards_list.mount(
                 Grid(
-                    Label(card['word'], classes='card-data'),
-                    Label(card['meaning'], classes='card-data card-meaning'),
+                    Label(card['word'], classes='csp-1'),
+                    Label(card['meaning'], classes='csp-3'),
                     classes='card-grid',
                 )
             )
