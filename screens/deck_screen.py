@@ -3,6 +3,7 @@ from textual.screen import Screen
 from textual.containers import Horizontal, VerticalScroll, Grid
 from textual.widgets import Label, Button, Header
 from screens.deck_edit_screen import DeckEditScreen
+from screens.deck_import_screen import DeckImportScreen
 import os
 import json
 
@@ -21,6 +22,7 @@ class DeckScreen(Screen):
         with Horizontal(classes='button-group'):
             yield Button('Back to Home', id='back', variant='default')
             yield Button('Edit', id='edit', variant='primary')
+            yield Button('Import', id='import', variant='primary')
         yield VerticalScroll(id='cards-list')
 
     def on_mount(self):
@@ -53,3 +55,5 @@ class DeckScreen(Screen):
             self.app.pop_screen()
         elif event.button.id == 'edit':
             self.app.push_screen(DeckEditScreen(deck_title=self.deck_title, on_edit=self.load_deck))
+        elif event.button.id == 'import':
+            self.app.push_screen(DeckImportScreen(deck_title=self.deck_title, on_import=self.load_deck))

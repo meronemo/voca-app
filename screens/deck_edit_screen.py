@@ -4,7 +4,6 @@ from textual.containers import Horizontal, Grid, VerticalScroll
 from textual.widgets import Label, Button, Header, Input
 from textual.validation import Function
 from textual.dom import NoMatches
-from screens.deck_edit_import_screen import DeckEditImportScreen
 import os
 import json
 
@@ -23,7 +22,6 @@ class DeckEditScreen(Screen):
         yield Input(id='description', placeholder='Description')
         with Horizontal(classes='button-group'):
             yield Button('Cancel', id='cancel', variant='default')
-            yield Button('Import', id='import', variant='primary')
             yield Button('Save', id='save', variant='success')
         yield Label('Cards', classes='title')
         yield VerticalScroll(id='cards-list')
@@ -40,7 +38,7 @@ class DeckEditScreen(Screen):
             classes='card-edit-grid',
         )
         
-    def load_deck(self, after_import=False):
+    def load_deck(self):
         cards_list = self.query_one('#cards-list')
         title_label = self.query_one('#title')
         description_input = self.query_one('#description')
@@ -56,24 +54,12 @@ class DeckEditScreen(Screen):
         self.cards_cnt = len(self.cards)
 
         for idx, card in enumerate(self.cards):
-            # Add card row only if it doesn't exist(for after_import)
-            try:
-                self.query_one(f'#word{idx}')
-            except NoMatches:
-                if after_import:
-                    add_card_button = self.query_one('#add-card')
-                    cards_list.mount(self.create_card_row(idx, card['word'], card['meaning']), before=add_card_button)
-                else:
-                    cards_list.mount(self.create_card_row(idx, card['word'], card['meaning']))
-        
-        if not after_import:
-            cards_list.mount(Button('Add Card', id='add-card', variant='primary'))
+            cards_list.mount(self.create_card_row(idx, card['word'], card['meaning']))
+        cards_list.mount(Button('Add Card', id='add-card', variant='primary'))
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
         if event.button.id == 'cancel':
             self.app.pop_screen()
-        elif event.button.id == 'import':
-            self.app.push_screen(DeckEditImportScreen(deck_title=self.deck_title, on_import=self.load_deck))
         elif event.button.id == 'save':
             # Check all inputs are valid before saving
             all_valid = True

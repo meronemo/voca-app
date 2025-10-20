@@ -5,7 +5,7 @@ from textual.widgets import Label, Button, Header, TextArea
 import os
 import json
 
-class DeckEditImportScreen(ModalScreen):
+class DeckImportScreen(ModalScreen):
     TITLE = 'Import Cards'
 
     def __init__(self, deck_title=None, on_import=None):
@@ -48,7 +48,7 @@ class DeckEditImportScreen(ModalScreen):
         with open(self.filepath, 'w', encoding='utf-8') as f:
             json.dump(deck_data, f, ensure_ascii=False, indent=4)
         self.notify(f'Saved imported cards', severity='information')
-        self.on_import(after_import=True) # call load_deck in deck edit screen to refresh deck datas
+        self.on_import() # call load_deck in deck screen to refresh deck datas
         self.app.pop_screen()
 
 def validate(value: str) -> bool:
