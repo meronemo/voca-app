@@ -121,6 +121,7 @@ class DeckEditScreen(Screen):
             idx = event.button.id.replace('remove', '')
             card_row = self.query_one(f'#card-row{idx}')
             card_row.remove()
+            self.cards_cnt -= 1
 
 def is_empty(value: str) -> bool:
     return value.strip()

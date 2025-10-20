@@ -38,6 +38,7 @@ class DeckScreen(Screen):
         description_label.update(description)
 
         cards_list = self.query_one('#cards-list')
+        cards_list.remove_children()
         for card in cards:
             cards_list.mount(
                 Grid(
