@@ -1,3 +1,4 @@
+from textual import on
 from textual.app import ComposeResult
 from textual.screen import ModalScreen
 from textual.containers import Horizontal
@@ -26,13 +27,15 @@ class DeckImportScreen(ModalScreen):
     def on_button_pressed(self, event: Button.Pressed) -> None:
         if event.button.id == 'cancel':
             self.app.pop_screen()
-        elif event.button.id == 'import':
-            data_input = self.query_one('#import-data')
-            data = data_input.text
-            if validate(data):
-                self.import_cards(data)
-            else:
-                self.notify('Invalid format', severity='error')
+    
+    @on(Button.Pressed, '#import')
+    def handle_import(self) -> None:
+        data_input = self.query_one('#import-data')
+        data = data_input.text
+        if validate(data):
+            self.import_cards(data)
+        else:
+            self.notify('Invalid format', severity='error')
 
     def import_cards(self, data: str) -> None:
         lines = data.strip().split('\n')

@@ -28,32 +28,34 @@ class CreateScreen(ModalScreen):
     def on_button_pressed(self, event: Button.Pressed) -> None:
         if event.button.id == 'cancel':
             self.app.pop_screen()
-        elif event.button.id == 'create':
-            title_input = self.query_one('#title')
-            desc_input = self.query_one('#description')
-            title = title_input.value.strip()
-            description = desc_input.value.strip()
+        
+    @on(Button.Pressed, '#create')
+    def handle_create(self) -> None:
+        title_input = self.query_one('#title')
+        desc_input = self.query_one('#description')
+        title = title_input.value.strip()
+        description = desc_input.value.strip()
 
-            if not title_input.is_valid:
-                return
+        if not title_input.is_valid:
+            return
 
-            os.makedirs('./decks', exist_ok=True)
-            file_path = os.path.join('./decks', f'{title}.json')
-            data = {
-                "title": title,
-                "description": description,
-                "cards": [] 
-            }
+        os.makedirs('./decks', exist_ok=True)
+        file_path = os.path.join('./decks', f'{title}.json')
+        data = {
+            "title": title,
+            "description": description,
+            "cards": [] 
+        }
 
-            try:
-                with open(file_path, 'w', encoding='utf-8') as f:
-                    json.dump(data, f, ensure_ascii=False, indent=4)
-                self.notify(f'Created {title} deck', severity='information')
-                self.on_create() # call load_decks in home screen to refresh decks list
-                self.app.pop_screen()
+        try:
+            with open(file_path, 'w', encoding='utf-8') as f:
+                json.dump(data, f, ensure_ascii=False, indent=4)
+            self.notify(f'Created {title} deck', severity='information')
+            self.on_create() # call load_decks in home screen to refresh decks list
+            self.app.pop_screen()
 
-            except Exception as e:
-                self.notify(f'Error creating deck: {e}', severity='error')
+        except Exception as e:
+            self.notify(f'Error creating deck: {e}', severity='error')
 
     @on(Input.Changed)
     def show_invalid_reasons(self, event: Input.Changed) -> None:

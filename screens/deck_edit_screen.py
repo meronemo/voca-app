@@ -1,9 +1,9 @@
+from textual import on
 from textual.app import ComposeResult
 from textual.screen import Screen
 from textual.containers import Horizontal, Grid, VerticalScroll
 from textual.widgets import Label, Button, Header, Input
 from textual.validation import Function
-from textual.dom import NoMatches
 import os
 import json
 
@@ -60,54 +60,60 @@ class DeckEditScreen(Screen):
     def on_button_pressed(self, event: Button.Pressed) -> None:
         if event.button.id == 'cancel':
             self.app.pop_screen()
-        elif event.button.id == 'save':
-            # Check all inputs are valid before saving
-            all_valid = True
-            for i in range(self.cards_cnt):
-                word_input = self.query_one(f'#word{i}')
-                meaning_input = self.query_one(f'#meaning{i}')
-                
-                if not word_input.is_valid or not meaning_input.is_valid:
-                    all_valid = False
-                    break
-            
-            if not all_valid:
-                self.notify('Please fill in all card fields before saving', severity='warning')
-                return
-            
-            new_data = {}
-            description_input = self.query_one('#description')
-            new_data['title'] = self.deck_title
-            new_data['description'] = description_input.value
-            new_data['cards'] = []
 
-            for i in range(self.cards_cnt):
-                word_input = self.query_one(f'#word{i}')
-                meaning_input = self.query_one(f'#meaning{i}')
-                new_data['cards'].append({'word': word_input.value, 'meaning': meaning_input.value})
+    @on(Button.Pressed, '#save')
+    def handle_save(self) -> None:
+        # Check all inputs are valid before saving
+        all_valid = True
+        for i in range(self.cards_cnt):
+            word_input = self.query_one(f'#word{i}')
+            meaning_input = self.query_one(f'#meaning{i}')
             
-            try:
-                with open(self.filepath, 'w', encoding='utf-8') as f:
-                    json.dump(new_data, f, ensure_ascii=False, indent=4)
-                self.notify(f'Edited {self.deck_title} deck', severity='information')
-                self.on_edit() # call load_deck in deck screen to refresh deck datas
-                self.app.pop_screen()
-            except Exception as e:
-                self.notify(f'Error editing deck: {e}', severity='error')
-        elif event.button.id == 'add-card':
-            cards_list = self.query_one('#cards-list')
-            add_card = self.query_one('#add-card')
+            if not word_input.is_valid or not meaning_input.is_valid:
+                all_valid = False
+                break
+        
+        if not all_valid:
+            self.notify('Please fill in all card fields before saving', severity='warning')
+            return
+        
+        new_data = {}
+        description_input = self.query_one('#description')
+        new_data['title'] = self.deck_title
+        new_data['description'] = description_input.value
+        new_data['cards'] = []
 
-            idx = self.cards_cnt
-            cards_list.mount(self.create_card_row(idx), before=add_card)
-            self.query_one(f'#word{idx}').focus()
-            self.cards_cnt += 1
-            cards_list.scroll_end(animate=False)
-        elif event.button.id.startswith('remove'):
-            idx = event.button.id.replace('remove', '')
-            card_row = self.query_one(f'#card-row{idx}')
-            card_row.remove()
-            self.cards_cnt -= 1
+        for i in range(self.cards_cnt):
+            word_input = self.query_one(f'#word{i}')
+            meaning_input = self.query_one(f'#meaning{i}')
+            new_data['cards'].append({'word': word_input.value, 'meaning': meaning_input.value})
+        
+        try:
+            with open(self.filepath, 'w', encoding='utf-8') as f:
+                json.dump(new_data, f, ensure_ascii=False, indent=4)
+            self.notify(f'Edited {self.deck_title} deck', severity='information')
+            self.on_edit() # call load_deck in deck screen to refresh deck datas
+            self.app.pop_screen()
+        except Exception as e:
+            self.notify(f'Error editing deck: {e}', severity='error')
+
+    @on(Button.Pressed, '#add-card')
+    def handle_add_card(self) -> None:
+        cards_list = self.query_one('#cards-list')
+        add_card = self.query_one('#add-card')
+
+        idx = self.cards_cnt
+        cards_list.mount(self.create_card_row(idx), before=add_card)
+        self.query_one(f'#word{idx}').focus()
+        self.cards_cnt += 1
+        cards_list.scroll_end(animate=False)
+
+    @on(Button.Pressed, '#remove')
+    def handle_remove(self, event: Button.Pressed) -> None:
+        idx = event.button.id.replace('remove', '')
+        card_row = self.query_one(f'#card-row{idx}')
+        card_row.remove()
+        self.cards_cnt -= 1
 
 def is_empty(value: str) -> bool:
     return value.strip()
