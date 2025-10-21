@@ -75,14 +75,14 @@ OptionList {
     height: 70%;
 }
 
-Card {
+#flashcard-container {
     width: 80%;
     height: 80%;
     border: solid $primary;
     padding: 1;
 }
 
-Card > Static {
+#flashcard-content {
     width: 100%;
     height: 100%;
     content-align: center middle;
