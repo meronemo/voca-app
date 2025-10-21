@@ -1,0 +1,14 @@
+{
+    "title": "test2",
+    "description": "",
+    "cards": [
+        {
+            "word": "asdf",
+            "meaning": "asdf"
+        },
+        {
+            "word": "hellio",
+            "meaning": "world"
+        }
+    ]
+}

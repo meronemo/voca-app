@@ -5,16 +5,14 @@ from textual.widgets import Label, Button, Header
 from screens.deck_edit_screen import DeckEditScreen
 from screens.deck_import_screen import DeckImportScreen
 from screens.flashcards_screen import FlashcardsScreen
-import os
-import json
+from utils.file_io import get_deck_path, read_json
 
 class DeckScreen(Screen):
     def __init__(self, deck_title):
         super().__init__()
         self.deck_title = deck_title
         self.title = f'Deck | {deck_title}'
-        filepath = os.path.join('./decks', f'{self.deck_title}.json')
-        self.filepath = filepath
+        self.filepath = get_deck_path(deck_title)
 
     def compose(self) -> ComposeResult:
         yield Header()
@@ -35,10 +33,10 @@ class DeckScreen(Screen):
         title_label = self.query_one('#title')
         description_label = self.query_one('#description')
         
-        with open(self.filepath, 'r') as f:
-            data = json.load(f)
-            description = data['description']
-            cards = data['cards']
+        data = read_json(self.filepath, default={})
+        description = data.get('description', '')
+        cards = data.get('cards', [])
+        
         title_label.update(self.deck_title)
         description_label.update(description)
 

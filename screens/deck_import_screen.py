@@ -3,8 +3,7 @@ from textual.app import ComposeResult
 from textual.screen import ModalScreen
 from textual.containers import Horizontal
 from textual.widgets import Label, Button, Header, TextArea
-import os
-import json
+from utils.file_io import get_deck_path, read_json, write_json
 
 class DeckImportScreen(ModalScreen):
     TITLE = 'Import Cards'
@@ -13,7 +12,7 @@ class DeckImportScreen(ModalScreen):
         super().__init__()
         self.deck_title = deck_title
         self.on_import = on_import
-        self.filepath = os.path.join('./decks', f'{deck_title}.json')
+        self.filepath = get_deck_path(deck_title)
         
     def compose(self) -> ComposeResult:
         yield Header()
@@ -44,12 +43,12 @@ class DeckImportScreen(ModalScreen):
             word, meaning = line.strip().split(None, 1)
             new_cards.append({'word': word, 'meaning': meaning})
 
-        with open(self.filepath, 'r') as f:
-            deck_data = json.load(f)
-            deck_data['cards'].extend(new_cards)
+        deck_data = read_json(self.filepath, default={})
+        if 'cards' not in deck_data:
+            deck_data['cards'] = []
+        deck_data['cards'].extend(new_cards)
         
-        with open(self.filepath, 'w', encoding='utf-8') as f:
-            json.dump(deck_data, f, ensure_ascii=False, indent=4)
+        write_json(self.filepath, deck_data)
         self.notify(f'Saved imported cards', severity='information')
         self.on_import() # call load_deck in deck screen to refresh deck datas
         self.app.pop_screen()

@@ -4,8 +4,8 @@ from textual.screen import ModalScreen
 from textual.containers import Horizontal
 from textual.widgets import Label, Button, Header, Input
 from textual.validation import ValidationResult, Validator
+from utils.file_io import get_deck_path, write_json
 import os
-import json
 import re
 
 class CreateScreen(ModalScreen):
@@ -39,8 +39,6 @@ class CreateScreen(ModalScreen):
         if not title_input.is_valid:
             return
 
-        os.makedirs('./decks', exist_ok=True)
-        file_path = os.path.join('./decks', f'{title}.json')
         data = {
             "title": title,
             "description": description,
@@ -48,8 +46,7 @@ class CreateScreen(ModalScreen):
         }
 
         try:
-            with open(file_path, 'w', encoding='utf-8') as f:
-                json.dump(data, f, ensure_ascii=False, indent=4)
+            write_json(get_deck_path(title), data)
             self.notify(f'Created {title} deck', severity='information')
             self.on_create() # call load_decks in home screen to refresh decks list
             self.app.pop_screen()
@@ -92,5 +89,5 @@ class TitleValidator(Validator):
     
     @staticmethod
     def already_exist(value: str) -> bool:
-        return os.path.exists(os.path.join('./decks', f'{value}.json'))
+        return os.path.exists(get_deck_path(value))
     

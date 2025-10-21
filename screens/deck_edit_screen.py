@@ -4,8 +4,7 @@ from textual.screen import Screen
 from textual.containers import Horizontal, Grid, VerticalScroll
 from textual.widgets import Label, Button, Header, Input
 from textual.validation import Function
-import os
-import json
+from utils.file_io import get_deck_path, read_json, write_json
 
 class DeckEditScreen(Screen):
     def __init__(self, deck_title, on_edit):
@@ -13,7 +12,7 @@ class DeckEditScreen(Screen):
         self.deck_title = deck_title
         self.title = f'Deck Edit | {deck_title}'
         self.on_edit = on_edit
-        self.filepath = os.path.join('./decks', f'{deck_title}.json')
+        self.filepath = get_deck_path(deck_title)
         self.cards_cnt = 0
 
     def compose(self) -> ComposeResult:
@@ -43,10 +42,9 @@ class DeckEditScreen(Screen):
         title_label = self.query_one('#title')
         description_input = self.query_one('#description')
 
-        with open(self.filepath, 'r') as f:
-            data = json.load(f)
-            description = data['description']
-            self.cards = data['cards']
+        data = read_json(self.filepath, default={})
+        description = data.get('description', '')
+        self.cards = data.get('cards', [])
 
         title_label.update(self.deck_title)
         description_input.value = description
@@ -89,8 +87,7 @@ class DeckEditScreen(Screen):
             new_data['cards'].append({'word': word_input.value, 'meaning': meaning_input.value})
         
         try:
-            with open(self.filepath, 'w', encoding='utf-8') as f:
-                json.dump(new_data, f, ensure_ascii=False, indent=4)
+            write_json(self.filepath, new_data)
             self.notify(f'Edited {self.deck_title} deck', severity='information')
             self.on_edit() # call load_deck in deck screen to refresh deck datas
             self.app.pop_screen()

@@ -2,8 +2,7 @@ from textual.app import ComposeResult
 from textual.screen import Screen
 from textual.containers import Grid, Horizontal, Container
 from textual.widgets import Button, Header, Static, ProgressBar
-import os
-import json
+from utils.file_io import get_deck_path, read_json
 
 class FlashcardsScreen(Screen):
     TITLE = 'Flashcards'
@@ -11,7 +10,7 @@ class FlashcardsScreen(Screen):
     def __init__(self, deck_title=None):
         super().__init__()
         self.deck_title = deck_title
-        self.filepath = os.path.join('./decks', f'{deck_title}.json')
+        self.filepath = get_deck_path(deck_title)
         
     def compose(self) -> ComposeResult:
         yield Header()
@@ -34,9 +33,8 @@ class FlashcardsScreen(Screen):
         self.load_card()
     
     def load_card(self):
-        with open(self.filepath, 'r') as f:
-            data = json.load(f)
-            cards = data['cards']
+        data = read_json(self.filepath, default={})
+        cards = data.get('cards', [])
         
         self.words, self.meanings = [], []
         for card in cards:

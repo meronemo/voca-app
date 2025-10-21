@@ -5,8 +5,8 @@ from textual.widgets import Label, Button, OptionList, Header
 from textual.widgets.option_list import Option
 from screens.create_screen import CreateScreen
 from screens.deck_screen import DeckScreen
+from utils.file_io import read_json, DECKS_DIR
 import os
-import json
 
 class HomeScreen(Screen):
     def compose(self) -> ComposeResult:
@@ -24,17 +24,15 @@ class HomeScreen(Screen):
     def load_decks(self):
         deck_list = self.query_one('#deck-list')
         deck_list.clear_options()
-        if os.path.exists('./decks'):
-            for filename in os.listdir('./decks'):
+        if os.path.exists(DECKS_DIR):
+            for filename in os.listdir(DECKS_DIR):
                 if filename.endswith(".json"):
-                    filepath = os.path.join('./decks', filename)
-                    with open(filepath, 'r') as f:
-                        try:
-                            data = json.load(f)
-                            if 'title' in data:
-                                deck_list.add_option(Option(data['title']))
-                        except json.JSONDecodeError:
-                            self.notify(f'JSON parsing error in {filename}', severity='error')
+                    filepath = os.path.join(DECKS_DIR, filename)
+                    data = read_json(filepath)
+                    if data and 'title' in data:
+                        deck_list.add_option(Option(data['title']))
+                    elif data is None:
+                        self.notify(f'JSON parsing error in {filename}', severity='error')
         else:
             self.notify('Decks directory not found', severity='information')
 
