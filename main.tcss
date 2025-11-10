@@ -96,3 +96,57 @@ OptionList {
     margin-top: 1;
     content-align: center middle;
 }
+
+#learn-container {
+    width: 80%;
+    height: 80%;
+    content-align: center middle;
+    border: solid $primary;
+    padding: 1;
+}
+
+#learn-prompt {
+    height: 50%;
+}
+
+#learn-grid {
+    grid-size: 2 2;
+    width: 100%;
+    height: 50%;
+    margin-top: 1;
+}
+
+#question-container {
+    width: 80%;
+    height: auto;
+    border: solid $primary;
+    padding: 2;
+    margin-bottom: 2;
+}
+
+#question-text {
+    width: 100%;
+    text-align: center;
+    text-style: bold;
+}
+
+#choices-container {
+    width: 80%;
+    height: auto;
+}
+
+.choice-button {
+    width: 100%;
+    height: auto;
+    min-height: 5;
+    margin: 1 0;
+    text-align: left;
+    padding: 1 2;
+}
+
+#result-message {
+    width: 80%;
+    text-align: center;
+    margin-top: 2;
+    text-style: bold;
+}

@@ -5,6 +5,7 @@ from textual.widgets import Label, Button, Header
 from screens.deck_edit_screen import DeckEditScreen
 from screens.deck_import_screen import DeckImportScreen
 from screens.flashcards_screen import FlashcardsScreen
+from screens.learn_screen import LearnScreen
 from utils.file_io import get_deck_path, read_json
 
 class DeckScreen(Screen):
@@ -23,6 +24,7 @@ class DeckScreen(Screen):
             yield Button('Edit', id='edit', variant='primary')
             yield Button('Import', id='import', variant='primary')
             yield Button('Flashcards', id='flashcards', variant='success')
+            yield Button('Learn', id='learn', variant='success')
         yield Label('Cards', classes='title')
         yield VerticalScroll(id='cards-list')
 
@@ -60,3 +62,5 @@ class DeckScreen(Screen):
             self.app.push_screen(DeckImportScreen(deck_title=self.deck_title, on_import=self.load_deck))
         elif event.button.id == 'flashcards':
             self.app.push_screen(FlashcardsScreen(deck_title=self.deck_title))
+        elif event.button.id == 'learn':
+            self.app.push_screen(LearnScreen(deck_title=self.deck_title))
